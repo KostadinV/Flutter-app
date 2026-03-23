@@ -30,6 +30,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
+  int _selectedIndex = 0;
 
   void _incrementCounter() {
     setState(() {
@@ -39,12 +40,10 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title),
-      ),
-      body: Center(
+
+    final List<Widget> pages = [
+
+      Center(
         child: Column(
           mainAxisAlignment: .center,
           children: [
@@ -56,10 +55,68 @@ class _MyHomePageState extends State<MyHomePage> {
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
+
+      const Padding(
+          padding: EdgeInsets.all(8.0),
+          child: Column(
+            children: <Widget>[
+              Card(
+                child: ListTile(
+                  leading: Icon(Icons.notifications_sharp),
+                  title: Text('Notification 1'),
+                  subtitle: Text('This is a notification'),
+                ),
+              ),
+              Card(
+                child: ListTile(
+                  leading: Icon(Icons.notifications_sharp),
+                  title: Text('Notification 2'),
+                  subtitle: Text('This is a notification'),
+                ),
+              ),
+            ],
+          ),
+        ),
+    ];
+
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        title: Text(widget.title),
+      ),
+
+      body: pages[_selectedIndex],
+
+      floatingActionButton: _selectedIndex == 0
+      ? FloatingActionButton(
         onPressed: _incrementCounter,
         tooltip: 'Increment',
         child: const Icon(Icons.add),
+      )
+      : null,
+
+      bottomNavigationBar: NavigationBar(
+        selectedIndex: _selectedIndex,
+
+        onDestinationSelected: (int index) {
+          setState(() {
+            _selectedIndex = index;
+          });
+        },
+
+        destinations: const [
+          NavigationDestination(
+            selectedIcon: Icon(Icons.calculate),
+            icon: Icon(Icons.calculate_outlined),
+            label: 'Counter',
+          ),
+
+          NavigationDestination(
+            icon: Icon(Icons.notifications_sharp),
+            label: 'Notifications',
+          ),
+        ],
+        
       ),
     );
   }
