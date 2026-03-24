@@ -112,7 +112,8 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
 
           NavigationDestination(
-            icon: Icon(Icons.notifications_sharp),
+            selectedIcon: Icon(Icons.notifications_sharp),
+            icon: Icon(Icons.notifications_outlined),
             label: 'Notifications',
           ),
         ],
