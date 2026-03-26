@@ -32,9 +32,17 @@ class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
   int _selectedIndex = 0;
 
+  final List<String> _notifications = [
+    'Notification 1',
+    'Notification 2',
+  ];
+
   void _incrementCounter() {
     setState(() {
       _counter++;
+      if (_counter % 10 == 0 && _counter != 0) {
+        _notifications.insert(0, 'You made $_counter taps!');
+      }
     });
   }
 
@@ -56,27 +64,23 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
 
-      const Padding(
-          padding: EdgeInsets.all(8.0),
-          child: Column(
-            children: <Widget>[
-              Card(
+      Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: ListView.builder(
+            itemCount: _notifications.length,
+            itemBuilder: (context, index) {
+              return Card(
                 child: ListTile(
                   leading: Icon(Icons.notifications_sharp),
-                  title: Text('Notification 1'),
-                  subtitle: Text('This is a notification'),
+                  title: Text(_notifications[index]),
+                  subtitle: Text('This is a dynamic notification'),
                 ),
-              ),
-              Card(
-                child: ListTile(
-                  leading: Icon(Icons.notifications_sharp),
-                  title: Text('Notification 2'),
-                  subtitle: Text('This is a notification'),
-                ),
-              ),
-            ],
-          ),
-        ),
+                );
+            },
+            ),
+            ),
+          
+        
     ];
 
     return Scaffold(
