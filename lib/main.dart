@@ -76,7 +76,17 @@ class _MyHomePageState extends State<MyHomePage> {
                   setState(() {
                     _notifications.removeAt(index);
                   });
+
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Notification swiped away')),
+                  );
                 },
+                background: Container(
+                  color: Colors.red,
+                  alignment: Alignment.centerRight,
+                  padding: const EdgeInsets.only(right: 20),
+                  child: const Icon(Icons.delete, color: Colors.white),
+                ),
               child: Card(
                 child: ListTile(
                   leading: Icon(Icons.notifications_sharp),
