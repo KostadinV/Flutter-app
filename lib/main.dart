@@ -69,7 +69,15 @@ class _MyHomePageState extends State<MyHomePage> {
           child: ListView.builder(
             itemCount: _notifications.length,
             itemBuilder: (context, index) {
-              return Card(
+              return Dismissible(
+                key: Key(_notifications[index] + index.toString()),
+
+                onDismissed: (direction){
+                  setState(() {
+                    _notifications.removeAt(index);
+                  });
+                },
+              child: Card(
                 child: ListTile(
                   leading: Icon(Icons.notifications_sharp),
                   title: Text(_notifications[index]),
@@ -83,7 +91,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   }, 
                 ),
                 ),
-                );
+              ),);
             },
             ),
             ),
