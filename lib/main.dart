@@ -74,13 +74,19 @@ class _MyHomePageState extends State<MyHomePage> {
                   leading: Icon(Icons.notifications_sharp),
                   title: Text(_notifications[index]),
                   subtitle: Text('This is a dynamic notification'),
+                  trailing: IconButton(
+                    icon: const Icon(Icons.delete_outline, color: Colors.redAccent),
+                    onPressed: () {
+                    setState(() {
+                      _notifications.removeAt(index);
+                    });
+                  }, 
+                ),
                 ),
                 );
             },
             ),
             ),
-          
-        
     ];
 
     return Scaffold(
