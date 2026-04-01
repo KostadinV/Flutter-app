@@ -46,6 +46,18 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  void _resetCounter() {
+  setState(() {
+    _counter = 0;
+  });
+  
+  // Optional: Task for the students
+  ScaffoldMessenger.of(context).showSnackBar(
+    const SnackBar(content: Text('Counter reset to zero')),
+  );
+  _notifications.insert(0, 'You reset the counter to 0');
+}
+
   @override
   Widget build(BuildContext context) {
 
@@ -59,6 +71,12 @@ class _MyHomePageState extends State<MyHomePage> {
             Text(
               '$_counter',
               style: Theme.of(context).textTheme.headlineMedium,
+            ),
+            const SizedBox(height: 20),
+            ElevatedButton.icon(
+              onPressed: _resetCounter,
+              icon: const Icon(Icons.refresh),
+              label: const Text('Reset Counter'),
             ),
           ],
         ),
