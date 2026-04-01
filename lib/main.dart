@@ -91,19 +91,33 @@ class _MyHomePageState extends State<MyHomePage> {
                 key: Key(_notifications[index] + index.toString()),
 
                 onDismissed: (direction){
-                  setState(() {
+                  if (direction == DismissDirection.startToEnd){
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text("Notification Archived")),
+                    );
+                    setState(() {
                     _notifications.removeAt(index);
                   });
-
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Notification swiped away')),
-                  );
+                  }else {
+                    setState((){
+                      _notifications.removeAt(index);
+                    });
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text("Notification Deleted")),
+                    );
+                  }
                 },
-                background: Container(
+                secondaryBackground: Container(
                   color: Colors.red,
                   alignment: Alignment.centerRight,
                   padding: const EdgeInsets.only(right: 20),
                   child: const Icon(Icons.delete, color: Colors.white),
+                ),
+                background: Container(
+                  color: Colors.green,
+                  alignment: Alignment.centerLeft,
+                  padding: const EdgeInsets.only(left: 20),
+                  child: const Icon(Icons.archive, color: Colors.white),
                 ),
               child: Card(
                 child: ListTile(
