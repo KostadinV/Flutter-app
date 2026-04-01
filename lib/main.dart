@@ -137,6 +137,8 @@ class _MyHomePageState extends State<MyHomePage> {
             },
             ),
             ),
+
+            ListView(),
     ];
 
     return Scaffold(
@@ -175,6 +177,12 @@ class _MyHomePageState extends State<MyHomePage> {
             selectedIcon: Icon(Icons.notifications_sharp),
             icon: Icon(Icons.notifications_outlined),
             label: 'Notifications',
+          ),
+
+          NavigationDestination(
+            selectedIcon: Icon(Icons.settings),
+            icon: Icon(Icons.settings_outlined),
+            label: 'Settings',
           ),
         ],
         
