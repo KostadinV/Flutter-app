@@ -4,25 +4,58 @@ void main() {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  ThemeMode _themeMode = ThemeMode.light;
+
+  void _toggleTheme(bool isDark) {
+    setState(() {
+      _themeMode = isDark ? ThemeMode.dark : ThemeMode.light;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
+      themeMode: _themeMode,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      darkTheme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.deepPurple,
+          brightness: Brightness.dark,
+        ),
+        useMaterial3: true,
+      ),
+      home: MyHomePage(
+        title: 'Flutter Demo Home Page',
+        isDarkMode: _themeMode == ThemeMode.dark,
+        onThemeChanged: _toggleTheme,
+      ),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
+  const MyHomePage({
+    super.key,
+    required this.title,
+    required this.isDarkMode,
+    required this.onThemeChanged,
+  });
 
   final String title;
+  final bool isDarkMode;
+  final ValueChanged<bool> onThemeChanged;
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -215,6 +248,32 @@ class _MyHomePageState extends State<MyHomePage> {
               );
             },
           ),
+
+          const Divider(),
+
+          const Padding(
+            padding: EdgeInsets.all(10.0),
+            child: Text(
+              "Personalization",
+              style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+            ),
+          ),
+          SwitchListTile(
+            title: const Text(
+              "Dark Mode",
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            subtitle: const Text("Switch between light and dark themes"),
+            secondary: Icon(
+              widget.isDarkMode ? Icons.dark_mode : Icons.light_mode,
+            ),
+            value: widget.isDarkMode,
+            onChanged: (bool value) {
+              // This calls the function up in MyApp!
+              widget.onThemeChanged(value);
+            },
+          ),
+          const Divider(),
         ],
       ),
     ];
