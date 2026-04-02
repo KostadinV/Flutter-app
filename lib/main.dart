@@ -31,6 +31,8 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
   int _selectedIndex = 0;
+  bool _notificationsEnabled = true;
+  double _notificationThreshold = 10;
 
   final List<String> _notifications = [
     'Notification 1',
@@ -40,7 +42,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void _incrementCounter() {
     setState(() {
       _counter++;
-      if (_counter % 10 == 0 && _counter != 0) {
+      if (_notificationsEnabled && _counter % _notificationThreshold.toInt() == 0  && _counter != 0) {
         _notifications.insert(0, 'You made $_counter taps!');
       }
     });
@@ -137,8 +139,70 @@ class _MyHomePageState extends State<MyHomePage> {
             },
             ),
             ),
+            ListView(
+    children: [
+      const Padding(
+        padding: EdgeInsets.all(10.0),
+        child: Text("Notifications", style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
+      ),
+      SwitchListTile(
+        title: const Text("Enable Tap Notifications", style: TextStyle(fontWeight: FontWeight.bold)),
+        subtitle: const Text("Get notified when hitting milestones"),
+        value: _notificationsEnabled,
+        secondary: const Icon(Icons.vibration),
+        onChanged: (bool value) {
+          setState(() {
+            _notificationsEnabled = value;
+          });
+        },
+      ),
+      const Divider(),
+      ListTile(
+  title: const Text("Hitting milestone", style: TextStyle(fontWeight: FontWeight.bold)),
+  subtitle: Text("Every ${_notificationThreshold.toInt()} taps"),
+  leading: const Icon(Icons.emoji_events),
+  onTap: () {
+    // Create a controller to handle the text inside the dialog
+    TextEditingController customController = TextEditingController(text: _notificationThreshold.toInt().toString());
 
-            ListView(),
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text("Set Milestone"),
+          content: TextField(
+            controller: customController,
+            keyboardType: TextInputType.number,
+            autofocus: true, // Automatically opens the keyboard
+            decoration: const InputDecoration(
+              labelText: "Number of taps",
+              suffixText: "taps",
+              border: OutlineInputBorder(),
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text("Cancel"),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                double? newValue = double.tryParse(customController.text);
+                if (newValue != null && newValue > 0) {
+                  setState(() => _notificationThreshold = newValue);
+                  Navigator.pop(context);
+                }
+              },
+              child: const Text("Save"),
+            ),
+          ],
+        );
+      },
+    );
+  },
+),
+    ],
+  ),
     ];
 
     return Scaffold(
