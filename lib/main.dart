@@ -222,7 +222,15 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title),
+        centerTitle: true, // Standard for Material 3
+        title: Text(
+          _selectedIndex == 0
+              ? "Tap Counter"
+              : _selectedIndex == 1
+              ? "Recent Activity"
+              : "Settings",
+          style: const TextStyle(fontWeight: FontWeight.bold),
+        ),
       ),
 
       body: pages[_selectedIndex],
