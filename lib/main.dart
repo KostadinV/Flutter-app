@@ -14,9 +14,17 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   ThemeMode _themeMode = ThemeMode.light;
 
+  Color _brandColor = Colors.deepPurple;
+
   void _toggleTheme(bool isDark) {
     setState(() {
       _themeMode = isDark ? ThemeMode.dark : ThemeMode.light;
+    });
+  }
+
+  void _updateColor(Color newColor) {
+    setState(() {
+      _brandColor = newColor;
     });
   }
 
@@ -26,12 +34,12 @@ class _MyAppState extends State<MyApp> {
       title: 'Flutter Demo',
       themeMode: _themeMode,
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(seedColor: _brandColor),
         useMaterial3: true,
       ),
       darkTheme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.deepPurple,
+          seedColor: _brandColor,
           brightness: Brightness.dark,
         ),
         useMaterial3: true,
@@ -40,6 +48,8 @@ class _MyAppState extends State<MyApp> {
         title: 'Flutter Demo Home Page',
         isDarkMode: _themeMode == ThemeMode.dark,
         onThemeChanged: _toggleTheme,
+        currentColor: _brandColor,
+        onColorChanged: _updateColor,
       ),
     );
   }
@@ -51,11 +61,15 @@ class MyHomePage extends StatefulWidget {
     required this.title,
     required this.isDarkMode,
     required this.onThemeChanged,
+    required this.currentColor,
+    required this.onColorChanged,
   });
 
   final String title;
   final bool isDarkMode;
   final ValueChanged<bool> onThemeChanged;
+  final Color currentColor;
+  final ValueChanged<Color> onColorChanged;
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -272,6 +286,42 @@ class _MyHomePageState extends State<MyHomePage> {
               // This calls the function up in MyApp!
               widget.onThemeChanged(value);
             },
+          ),
+          const Divider(),
+
+          ListTile(
+            leading: const Icon(Icons.palette),
+            title: const Text(
+              "Theme Color",
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            subtitle: const Text("Personalize your app's vibe"),
+            trailing: Wrap(
+              spacing: 8,
+              children:
+                  [
+                    Colors.deepPurple,
+                    Colors.blue,
+                    Colors.orange,
+                    Colors.green,
+                  ].map((color) {
+                    return GestureDetector(
+                      onTap: () => widget.onColorChanged(color),
+                      child: Container(
+                        width: 24,
+                        height: 24,
+                        decoration: BoxDecoration(
+                          color: color,
+                          shape: BoxShape.circle,
+                          // Add a border if this is the currently selected color
+                          border: widget.currentColor == color
+                              ? Border.all(width: 2, color: Colors.black54)
+                              : null,
+                        ),
+                      ),
+                    );
+                  }).toList(),
+            ),
           ),
           const Divider(),
         ],
